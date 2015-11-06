@@ -4,16 +4,14 @@ Dir['*/'].each do |proj|
   Dir.chdir proj
 
   if system('test $(git status -s | wc -l | sed -E "s/[^0-9]*//g") -gt 0')
-    printf '%s => is *** dirty ***', proj
+    printf 'Project: %s', proj
     puts
 
     prefix = Time.now.strftime('%Y%m%d%H%M%S')
     puts `git add --all`
     puts `git commit -m 'autocommitting latest changes'`
     puts `git push origin head:#{prefix}/pending-review`
-    puts
-  else
-    printf '%s => clean...', proj
+    puts `git push origin head`
     puts
   end
 
